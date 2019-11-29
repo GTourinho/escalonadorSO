@@ -34,7 +34,7 @@ public class main extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
+				try {testeeeeeee;
 					main frame = new main();
 					frame.setVisible(true);
 				} catch (Exception e) {

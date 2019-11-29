@@ -1,5 +1,5 @@
 package escalonador;
-testzinho;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -21,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JSpinner;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
-testezin;;;
+agrsimtesteserio;
 	
 
 public class main extends JFrame {
@@ -34,7 +34,7 @@ public class main extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {testeeeeeee;
+				try {
 					main frame = new main();
 					frame.setVisible(true);
 				} catch (Exception e) {

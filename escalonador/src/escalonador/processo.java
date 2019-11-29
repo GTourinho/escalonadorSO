@@ -13,5 +13,5 @@ public class processo {
 	public int tempoExec;
 	public int deadline;
 	public int prioridade;
-	
+	public int numeroPaginas;
 }

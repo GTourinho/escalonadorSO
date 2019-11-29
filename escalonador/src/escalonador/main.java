@@ -2,7 +2,7 @@ package escalonador;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-teste1;
+teste11231231;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;

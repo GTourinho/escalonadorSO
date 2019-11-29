@@ -18,7 +18,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 import java.awt.Color;
 import javax.swing.JScrollBar;
-
+import javax.swing.JTextArea;
+import javax.swing.JSpinner;
+import javax.swing.JProgressBar;
+import javax.swing.JSlider;
 	
 
 public class main extends JFrame {

@@ -21,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JSpinner;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
-testezin;
+testezin;;;
 	
 
 public class main extends JFrame {

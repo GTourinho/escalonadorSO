@@ -21,9 +21,8 @@ import javax.swing.JTextArea;
 import javax.swing.JSpinner;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
-agrsimtesteserio;
-	
-??lolwrtf
+
+
 public class main extends JFrame {
 	
 	private JPanel contentPane;

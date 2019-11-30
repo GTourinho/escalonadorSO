@@ -150,7 +150,7 @@ public class main extends JFrame {
 		contentPane.add(txtpnNovoProcesso);
 		
 		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		spinner.setToolTipText("");
 		spinner.setBounds(20, 47, 30, 20);
 		contentPane.add(spinner);

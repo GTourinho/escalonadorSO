@@ -27,6 +27,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.SpinnerListModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 
 
 public class main extends JFrame {
@@ -37,6 +40,7 @@ public class main extends JFrame {
 	
 	private JPanel contentPane;
 	private JTable table;
+	private JTable table_1;
 
 	/**
 	 * Launch the application.
@@ -198,6 +202,83 @@ public class main extends JFrame {
 		JButton btnNewButton = new JButton("Iniciar simula\u00E7\u00E3o");
 		btnNewButton.setBounds(224, 171, 154, 23);
 		contentPane.add(btnNewButton);
+		
+		table_1 = new JTable();
+		table_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+				{"Pid", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+			},
+			new String[] {
+				"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				String.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		table_1.getColumnModel().getColumn(0).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(1).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(2).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(3).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(4).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(5).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(6).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(7).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(8).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(9).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(10).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(11).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(12).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(13).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(14).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(15).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(16).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(17).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(18).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(19).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(20).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(21).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(22).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(23).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(24).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(25).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(26).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(27).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(28).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(29).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(30).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(31).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(32).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(32).setMaxWidth(15);
+		table_1.getColumnModel().getColumn(33).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(34).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(35).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(36).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(37).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(38).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(39).setPreferredWidth(15);
+		table_1.getColumnModel().getColumn(40).setPreferredWidth(15);
+		table_1.setBounds(10, 404, 742, 256);
+		contentPane.add(table_1);
 		
 	
 	}

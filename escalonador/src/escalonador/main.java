@@ -34,7 +34,6 @@ public class main extends JFrame {
 	public processo[] processos = new processo[15];
 	public int nProcessos = 0;
 	public boolean maxProcessosAtingido = false;
-	JLabel lblAlgoritmoDeEscalonamento = new JLabel("Algoritmo de escalonamento");
 	
 	private JPanel contentPane;
 	private JTable table;
@@ -148,10 +147,6 @@ public class main extends JFrame {
 					else {
 						processos[nProcessos] = new processo(nProcessos+1, aux, aux2, aux3, aux4);
 						nProcessos++;
-						
-						System.out.print(processos[nProcessos].getPid());
-						
-						// lblAlgoritmoDeEscalonamento.setText(String.valueOf(processos[nProcessos].pid));
 					}
 					
 				}
@@ -169,8 +164,8 @@ public class main extends JFrame {
 		spinner_4.setBounds(210, 47, 44, 20);
 		contentPane.add(spinner_4);
 		
-		
-		lblAlgoritmoDeEscalonamento.setBounds(264, 50, 178, 14);
+		JLabel lblAlgoritmoDeEscalonamento = new JLabel("Algoritmo de escalonamento");
+		lblAlgoritmoDeEscalonamento.setBounds(264, 50, 154, 14);
 		contentPane.add(lblAlgoritmoDeEscalonamento);
 		
 		JSpinner spinner_5 = new JSpinner();

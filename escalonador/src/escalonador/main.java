@@ -31,22 +31,50 @@ import javax.swing.SpinnerListModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+import java.util.*;
+
+
+
+
+
 
 public class main extends JFrame {
+	
+	// Comparador para fila de prioridade, de acordo com o algoritmo de escalonação
 
+	Comparator<processo> comparador = new Comparator<processo>() {
+        @Override
+        public int compare(processo a, processo b) {
+        	
+        	if(algoritmoEscalonamento == "EDF") {
+        	
+        	
+            return a.getDeadline() - b.getDeadline();
+            
+        	}
+        	
+        	
+			return 0;
+            
+        }
+    };
+	
+    public processo processoAtual;
+    public boolean executando = false;
+	public PriorityQueue<processo> filaprocessos = new PriorityQueue<processo>(comparador);
+	public int contador = 0;
 	public int um_segundo = 1000;
 	public Timer timer = new Timer(um_segundo, null);
-	public String algoritmoEscalonamento;
-	public String algoritmoPaginacao;
-	
-	
+	public static String algoritmoEscalonamento;
+	public static String algoritmoPaginacao;
 	public processo[] processos = new processo[15];
 	public int nProcessos = 0;
 	public boolean maxProcessosAtingido = false;
-	
 	private JPanel contentPane;
-	private JTable table;
 	private JTable table_1;
+	public int tempoExecAtual;
+	
+	
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -64,13 +92,42 @@ public class main extends JFrame {
 
 	public main() {
 		
-		
+	
 		
 		timer = new Timer(um_segundo, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 
-                
-                 
+            	contador++;
+            	
+            	// Se chegou o tempo de execução de algum processo, colocá-lo na fila
+            	
+            	for(int i = 0; i<nProcessos; i++) {  		
+            		if(processos[i].getTempoChegada() == contador) {
+            			filaprocessos.add(processos[i]);
+            		}	
+            	}
+            	
+            	// Executar processo que está em sua vez
+            	
+            	if(executando == false) {
+            		
+            		if(!filaprocessos.isEmpty()) {
+            			processoAtual = filaprocessos.poll();
+            			executando = true;
+            		}
+            	}
+            	
+            	if(executando == true) {
+            		
+            		tempoExecAtual = processoAtual.getTempoExec();
+            		processoAtual.setTempoExec(tempoExecAtual -1);
+            		if(processoAtual.getTempoExec() == 0) {
+            			executando = false;
+            		}
+            		
+            		table_1.setValueAt("X", processoAtual.getPid(), contador);
+            		
+            	}
                
             }
         });
@@ -105,7 +162,7 @@ public class main extends JFrame {
 		contentPane.add(txtpnTempochegada);
 		
 		JSpinner spinner_1 = new JSpinner();
-		spinner_1.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		spinner_1.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		spinner_1.setBounds(20, 78, 30, 20);
 		contentPane.add(spinner_1);
 		
@@ -220,6 +277,9 @@ public class main extends JFrame {
 				timer.start();
 				algoritmoEscalonamento = (String)spinner_4.getValue();
 				algoritmoPaginacao = (String)spinner_5.getValue();
+
+					
+				
 				
 			}
 		});

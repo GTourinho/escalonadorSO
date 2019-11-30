@@ -178,8 +178,25 @@ public class main extends JFrame {
 		contentPane.add(lblAlgoritmoDePaginao);
 		
 		JSpinner spinner_6 = new JSpinner();
+		spinner_6.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		spinner_6.setBounds(224, 109, 30, 20);
 		contentPane.add(spinner_6);
+		
+		JLabel lblQuantumDoSistema = new JLabel("Quantum do sistema");
+		lblQuantumDoSistema.setBounds(264, 112, 154, 14);
+		contentPane.add(lblQuantumDoSistema);
+		
+		JSpinner spinner_7 = new JSpinner();
+		spinner_7.setBounds(224, 140, 30, 20);
+		contentPane.add(spinner_7);
+		
+		JLabel lblNewLabel = new JLabel("Sobrecarga do sistema");
+		lblNewLabel.setBounds(264, 143, 139, 14);
+		contentPane.add(lblNewLabel);
+		
+		JButton btnNewButton = new JButton("Iniciar simula\u00E7\u00E3o");
+		btnNewButton.setBounds(224, 171, 154, 23);
+		contentPane.add(btnNewButton);
 		
 	
 	}

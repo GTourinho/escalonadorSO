@@ -187,6 +187,7 @@ public class main extends JFrame {
 		contentPane.add(lblQuantumDoSistema);
 		
 		JSpinner spinner_7 = new JSpinner();
+		spinner_7.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		spinner_7.setBounds(224, 140, 30, 20);
 		contentPane.add(spinner_7);
 		

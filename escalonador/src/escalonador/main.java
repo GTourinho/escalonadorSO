@@ -1,5 +1,6 @@
 package escalonador;
 
+import javax.swing.Timer;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -31,8 +32,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 
-
 public class main extends JFrame {
+
+	public int um_segundo = 1000;
+	public Timer timer = new Timer(um_segundo, null);
+	public String algoritmoEscalonamento;
+	public String algoritmoPaginacao;
+	
 	
 	public processo[] processos = new processo[15];
 	public int nProcessos = 0;
@@ -42,9 +48,6 @@ public class main extends JFrame {
 	private JTable table;
 	private JTable table_1;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -53,24 +56,30 @@ public class main extends JFrame {
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
-				}
-				
-				
+				}		
 				
 			}
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public main() {
 		
 		
+		
+		timer = new Timer(um_segundo, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                
+                
+                 
+               
+            }
+        });
+
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 778, 710);
+		setBounds(100, 100, 1016, 710);
 		contentPane = new JPanel();
-		contentPane.setToolTipText("Tempo de Chegada");
+		contentPane.setToolTipText("");
 		contentPane.setBackground(SystemColor.menu);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -151,6 +160,11 @@ public class main extends JFrame {
 					else {
 						processos[nProcessos] = new processo(nProcessos+1, aux, aux2, aux3, aux4);
 						nProcessos++;
+						table_1.setValueAt(processos[nProcessos-1].getPid(),nProcessos,0);
+						
+						// Coloca o valor PID na tabela
+
+                        table_1.setValueAt(nProcessos, nProcessos, 0);
 					}
 					
 				}
@@ -200,14 +214,24 @@ public class main extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JButton btnNewButton = new JButton("Iniciar simula\u00E7\u00E3o");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				timer.start();
+				algoritmoEscalonamento = (String)spinner_4.getValue();
+				algoritmoPaginacao = (String)spinner_5.getValue();
+				
+			}
+		});
 		btnNewButton.setBounds(224, 171, 154, 23);
 		contentPane.add(btnNewButton);
 		
 		table_1 = new JTable();
+		table_1.setShowGrid(false);
 		table_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 		table_1.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Pid", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"},
+				{"PID", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"},
 				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
 				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
 				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -235,6 +259,7 @@ public class main extends JFrame {
 				return columnTypes[columnIndex];
 			}
 		});
+		
 		table_1.getColumnModel().getColumn(0).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(1).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(2).setPreferredWidth(15);
@@ -268,7 +293,7 @@ public class main extends JFrame {
 		table_1.getColumnModel().getColumn(30).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(31).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(32).setPreferredWidth(15);
-		table_1.getColumnModel().getColumn(32).setMaxWidth(15);
+		table_1.getColumnModel().getColumn(32).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(33).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(34).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(35).setPreferredWidth(15);
@@ -277,7 +302,7 @@ public class main extends JFrame {
 		table_1.getColumnModel().getColumn(38).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(39).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(40).setPreferredWidth(15);
-		table_1.setBounds(10, 404, 742, 256);
+		table_1.setBounds(10, 405, 980, 256);
 		contentPane.add(table_1);
 		
 	

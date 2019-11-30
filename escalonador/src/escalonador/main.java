@@ -22,14 +22,22 @@ import javax.swing.JSpinner;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.JTable;
+import javax.swing.JMenuBar;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.SpinnerListModel;
 
 
 public class main extends JFrame {
 	
 	public processo[] processos = new processo[15];
 	public int nProcessos = 0;
+	public boolean maxProcessosAtingido = false;
+	JLabel lblAlgoritmoDeEscalonamento = new JLabel("Algoritmo de escalonamento");
 	
 	private JPanel contentPane;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -125,12 +133,59 @@ public class main extends JFrame {
 				int aux3 = (Integer) spinner_2.getValue();
 				int aux4 = (Integer) spinner_3.getValue();
 				
-				processos[nProcessos] = new processo(aux, aux2, aux3, aux4);
-				nProcessos++;
+				if(maxProcessosAtingido == false) {
+					
+					// Se atingir o máximo de processos, impede a criação de um novo
+					
+					if(nProcessos == 15) {
+						nProcessos--;
+						maxProcessosAtingido = true;
+						JOptionPane.showMessageDialog(null, "Número máximo de processos atingido (15)");
+					}
+					
+					// Senão, cria processo
+					
+					else {
+						processos[nProcessos] = new processo(nProcessos+1, aux, aux2, aux3, aux4);
+						nProcessos++;
+						
+						System.out.print(processos[nProcessos].getPid());
+						
+						// lblAlgoritmoDeEscalonamento.setText(String.valueOf(processos[nProcessos].pid));
+					}
+					
+				}
 				
+				else {
+					JOptionPane.showMessageDialog(null, "Número máximo de processos atingido (15)");
+				}
 			}
 		});
 		btnCriarProcesso.setBounds(30, 171, 124, 23);
 		contentPane.add(btnCriarProcesso);
+		
+		JSpinner spinner_4 = new JSpinner();
+		spinner_4.setModel(new SpinnerListModel(new String[] {"FIFO", "SJF", "RR", "EDF"}));
+		spinner_4.setBounds(210, 47, 44, 20);
+		contentPane.add(spinner_4);
+		
+		
+		lblAlgoritmoDeEscalonamento.setBounds(264, 50, 178, 14);
+		contentPane.add(lblAlgoritmoDeEscalonamento);
+		
+		JSpinner spinner_5 = new JSpinner();
+		spinner_5.setModel(new SpinnerListModel(new String[] {"FIFO", "MRU"}));
+		spinner_5.setBounds(210, 78, 44, 20);
+		contentPane.add(spinner_5);
+		
+		JLabel lblAlgoritmoDePaginao = new JLabel("Algoritmo de pagina\u00E7\u00E3o");
+		lblAlgoritmoDePaginao.setBounds(264, 81, 139, 14);
+		contentPane.add(lblAlgoritmoDePaginao);
+		
+		JSpinner spinner_6 = new JSpinner();
+		spinner_6.setBounds(224, 109, 30, 20);
+		contentPane.add(spinner_6);
+		
+	
 	}
 }

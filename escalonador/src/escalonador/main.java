@@ -21,9 +21,13 @@ import javax.swing.JTextArea;
 import javax.swing.JSpinner;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
+import javax.swing.SpinnerNumberModel;
 
 
 public class main extends JFrame {
+	
+	public processo[] processos = new processo[15];
+	public int nProcessos = 0;
 	
 	private JPanel contentPane;
 
@@ -51,9 +55,11 @@ public class main extends JFrame {
 	 */
 	public main() {
 		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 778, 710);
 		contentPane = new JPanel();
+		contentPane.setToolTipText("Tempo de Chegada");
 		contentPane.setBackground(SystemColor.menu);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -67,6 +73,8 @@ public class main extends JFrame {
 		contentPane.add(txtpnNovoProcesso);
 		
 		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		spinner.setToolTipText("");
 		spinner.setBounds(20, 47, 30, 20);
 		contentPane.add(spinner);
 		
@@ -77,10 +85,12 @@ public class main extends JFrame {
 		contentPane.add(txtpnTempochegada);
 		
 		JSpinner spinner_1 = new JSpinner();
+		spinner_1.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		spinner_1.setBounds(20, 78, 30, 20);
 		contentPane.add(spinner_1);
 		
 		JSpinner spinner_2 = new JSpinner();
+		spinner_2.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		spinner_2.setBounds(20, 109, 30, 20);
 		contentPane.add(spinner_2);
 		
@@ -109,9 +119,18 @@ public class main extends JFrame {
 		JButton btnCriarProcesso = new JButton("Criar processo");
 		btnCriarProcesso.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				int aux = (Integer) spinner.getValue();
+				int aux2 = (Integer) spinner_1.getValue();
+				int aux3 = (Integer) spinner_2.getValue();
+				int aux4 = (Integer) spinner_3.getValue();
+				
+				processos[nProcessos] = new processo(aux, aux2, aux3, aux4);
+				nProcessos++;
+				
 			}
 		});
-		btnCriarProcesso.setBounds(34, 171, 124, 23);
+		btnCriarProcesso.setBounds(30, 171, 124, 23);
 		contentPane.add(btnCriarProcesso);
 	}
 }

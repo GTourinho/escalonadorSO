@@ -145,6 +145,7 @@ public class main extends JFrame {
             		tempoExecAtual = processoAtual.getTempoExec();
             		processoAtual.setTempoExec(tempoExecAtual -1);
             		quantumAtual--;
+            		processoAtual.setDeadline(processoAtual.getDeadline()-1);
             		
             		if(processoAtual.getTempoExec() == 0) {
             			executando = false;

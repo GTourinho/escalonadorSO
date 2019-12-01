@@ -60,7 +60,7 @@ public class main extends JFrame {
         	}
         	
         	
-			return 0;
+			return a.tempoChegada - b.tempoChegada;
             
         }
     };
@@ -99,6 +99,7 @@ public class main extends JFrame {
     public boolean executando = false;
 	public PriorityQueue<processo> filaprocessos = new PriorityQueue<processo>(comparador);
 	public int contador = 0;
+	public int pintador = 0;
 	public int umSegundo = 250;
 	public Timer timer = new Timer(umSegundo, null);
 	public static String algoritmoEscalonamento;
@@ -137,11 +138,30 @@ public class main extends JFrame {
 		
 		timer = new Timer(umSegundo, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
+            	
+            	
                 
+            	
             	
             	if(pageFault == false) {
             		
+            		
+            		
 	            	contador++;
+	            	
+	            	pintador++;
+	            	
+	            	if(pintador > 40) {	
+                		pintador = 40;
+                		
+                		for(int i=1; i<16; i++) {	
+                			for(int j=1; j<40; j++) {		
+        	            		table_1.setValueAt(table_1.getValueAt(i, j+1), i, j);
+                			}	
+                		}
+                		
+                	}
+	            	
 	            	
 	            	// Se chegou o tempo de execução de algum processo, colocá-lo na fila
 	            	
@@ -157,7 +177,16 @@ public class main extends JFrame {
 	            		
 	            		if(quantumAtual == 0 && sobrecargaAtual > 0) {
 	            			sobrecargaAtual--;
-	            			table_1.setValueAt("S", processoAtual.getPid(), contador);
+	            			for(int i=1; i<16; i++) {
+		            			if(processoAtual.getPid() != i) {
+		            				table_1.setValueAt(" ", i, pintador);
+		            			}
+		            			else {
+		            				table_1.setValueAt("S", i, pintador);
+		            			}
+		            		}
+	            			
+	            			
 	            		}
 	            		else if(sobrecargaAtual == 0) {
 	            			sobrecargaAtual = sobrecarga;
@@ -242,7 +271,6 @@ public class main extends JFrame {
 	            		if(processoAtual.getTempoExec() == 0) {
 	            			processoAtual.setTurnaround(contador+1 - processoAtual.getTempoChegada());
 	            			somaturnarounds += processoAtual.getTurnaround();
-	            			System.out.println(turnaroundMedioValor);
 	            			countFim++;
 	            			executando = false;
 	            			quantumAtual = quantum;
@@ -252,8 +280,17 @@ public class main extends JFrame {
 	            			if(countFim == nProcessos) {
 	            				
 	            				turnaroundMedioValor = somaturnarounds / nProcessos;
+	            				
+	            				for(int i=1; i<16; i++) {
+			            			if(processoAtual.getPid() != i) {
+			            				table_1.setValueAt(" ", i, pintador);
+			            			}
+			            			else {
+			            				table_1.setValueAt("X", i, pintador);
+			            			}
+			            		}
 	            				JOptionPane.showMessageDialog(null, "Todos processos finalizaram!" + " Turnaround m\u00E9dio = " + somaturnarounds + "/" + String.valueOf(nProcessos) + " = " + String.valueOf(turnaroundMedioValor));
-	            				table_1.setValueAt("X", processoAtual.getPid(), contador);
+	            				
 	            				timer.stop();
 	            				
 	            			}
@@ -263,13 +300,23 @@ public class main extends JFrame {
 	            		else if(quantumAtual == 0 && quantum > 0) {
 	            			
 	            			executando = false;
+	            			processoAtual.setTempoChegada(contador);
 	            			
 	            			           			
 	            		}
 	            		
 	            		
 	            		
-	            		table_1.setValueAt("X", processoAtual.getPid(), contador);
+	            		for(int i=1; i<16; i++) {
+	            			if(processoAtual.getPid() != i) {
+	            				table_1.setValueAt(" ", i, pintador);
+	            			}
+	            			else {
+	            				table_1.setValueAt("X", i, pintador);
+	            			}
+	            		}
+	            		
+	            		
 	            		
 	            	}
 	               
@@ -319,12 +366,17 @@ public class main extends JFrame {
             			
             			executando = true;
             			pageFault = false;
-            			
-            		
+            			if(pintador < 40) {
+            				pintador--;
+            			}
             		}
             		
             		
             	}
+            	
+            	
+            	
+            	
             }
         });
 
@@ -555,21 +607,21 @@ public class main extends JFrame {
 		table_1.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"PID", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+				{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
 			},
 			new String[] {
 				"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"

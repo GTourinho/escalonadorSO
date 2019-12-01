@@ -52,6 +52,11 @@ public class main extends JFrame {
             return a.getDeadline() - b.getDeadline();
             
         	}
+        	else if(algoritmoEscalonamento == "SJF") {
+        		
+        		return a.getTempoExec() - b.getTempoExec();
+        		
+        	}
         	
         	
 			return 0;
@@ -59,12 +64,16 @@ public class main extends JFrame {
         }
     };
 	
+    public int quantumAtual;
+    public int sobrecargaAtual;
+    public int quantum;
+    public int sobrecarga;
     public processo processoAtual;
     public boolean executando = false;
 	public PriorityQueue<processo> filaprocessos = new PriorityQueue<processo>(comparador);
 	public int contador = 0;
-	public int um_segundo = 1000;
-	public Timer timer = new Timer(um_segundo, null);
+	public int umSegundo = 1000;
+	public Timer timer = new Timer(umSegundo, null);
 	public static String algoritmoEscalonamento;
 	public static String algoritmoPaginacao;
 	public processo[] processos = new processo[15];
@@ -73,6 +82,8 @@ public class main extends JFrame {
 	private JPanel contentPane;
 	private JTable table_1;
 	public int tempoExecAtual;
+
+	
 	
 	
 
@@ -94,7 +105,7 @@ public class main extends JFrame {
 		
 	
 		
-		timer = new Timer(um_segundo, new ActionListener() {
+		timer = new Timer(umSegundo, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 
             	contador++;
@@ -111,19 +122,44 @@ public class main extends JFrame {
             	
             	if(executando == false) {
             		
-            		if(!filaprocessos.isEmpty()) {
+            		if(quantumAtual == 0 && sobrecargaAtual > 0) {
+            			sobrecargaAtual--;
+            			table_1.setValueAt("S", processoAtual.getPid(), contador);
+            		}
+            		else if(sobrecargaAtual == 0) {
+            			sobrecargaAtual = sobrecarga;
+            			quantumAtual = quantum;
+            			filaprocessos.add(processoAtual);
+            		}
+            		
+            		if(!filaprocessos.isEmpty() && (quantumAtual > 0 || algoritmoEscalonamento == "FIFO" || algoritmoEscalonamento == "SJF")) {
+            			
             			processoAtual = filaprocessos.poll();
             			executando = true;
             		}
+            		
             	}
             	
             	if(executando == true) {
             		
             		tempoExecAtual = processoAtual.getTempoExec();
             		processoAtual.setTempoExec(tempoExecAtual -1);
+            		quantumAtual--;
+            		
             		if(processoAtual.getTempoExec() == 0) {
             			executando = false;
+            			quantumAtual = quantum;
+            			sobrecargaAtual = sobrecarga;
             		}
+            		
+            		else if(quantumAtual == 0 && quantum > 0) {
+            			
+            			executando = false;
+            			
+            			           			
+            		}
+            		
+            		
             		
             		table_1.setValueAt("X", processoAtual.getPid(), contador);
             		
@@ -277,6 +313,15 @@ public class main extends JFrame {
 				timer.start();
 				algoritmoEscalonamento = (String)spinner_4.getValue();
 				algoritmoPaginacao = (String)spinner_5.getValue();
+				
+				if(algoritmoEscalonamento == "EDF" || algoritmoEscalonamento == "RR") {
+					
+					quantum = (Integer) spinner_6.getValue();
+					sobrecarga = (Integer) spinner_7.getValue();
+					quantumAtual = quantum;
+					sobrecargaAtual = sobrecarga;
+					
+				}
 
 					
 				

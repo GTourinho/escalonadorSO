@@ -32,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.util.*;
+import java.awt.Font;
 
 
 
@@ -63,25 +64,53 @@ public class main extends JFrame {
             
         }
     };
-	
-    public int quantumAtual;
-    public int sobrecargaAtual;
-    public int quantum;
-    public int sobrecarga;
+    
+    Comparator<Pagina> comparadorP = new Comparator<Pagina>() {
+        @Override
+        public int compare(Pagina a, Pagina b) {
+        	
+        	
+        	
+        	
+            return a.getTempo() - b.getTempo();
+            
+        	
+        	
+
+            
+        }
+    };
+    
+    public int countFim = 0;
+    public double turnaroundMedioValor = 0;
+    public int nProcessos = 0;
+    public double somaturnarounds = 0;
+    public int memoriaUsada;
+	public Vector<Pagina> paginasFault = new Vector<Pagina>();
+    public PriorityQueue<Pagina> paginas = new PriorityQueue<Pagina>(comparadorP);
+    public boolean pageFault = false;
+    public int lin_t1 = 0, lin_t2 = 0, col_t1 = 0, col_t2 = 0;
+    public int cont_t1 = 1, cont_t2 = 51;
+    public int quantumAtual=3;
+    public int sobrecargaAtual=3;
+    public int quantum=3;
+    public int sobrecarga=3;
     public processo processoAtual;
     public boolean executando = false;
 	public PriorityQueue<processo> filaprocessos = new PriorityQueue<processo>(comparador);
 	public int contador = 0;
-	public int umSegundo = 1000;
+	public int umSegundo = 250;
 	public Timer timer = new Timer(umSegundo, null);
 	public static String algoritmoEscalonamento;
 	public static String algoritmoPaginacao;
 	public processo[] processos = new processo[15];
-	public int nProcessos = 0;
 	public boolean maxProcessosAtingido = false;
 	private JPanel contentPane;
 	private JTable table_1;
 	public int tempoExecAtual;
+	private JTable table;
+	private JTable table_2;
+	public int contadorP;
 
 	
 	
@@ -102,76 +131,206 @@ public class main extends JFrame {
 	}
 
 	public main() {
+		setTitle("Escalonador - SO");
 		
 	
 		
 		timer = new Timer(umSegundo, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 
-            	contador++;
             	
-            	// Se chegou o tempo de execução de algum processo, colocá-lo na fila
-            	
-            	for(int i = 0; i<nProcessos; i++) {  		
-            		if(processos[i].getTempoChegada() == contador) {
-            			filaprocessos.add(processos[i]);
-            		}	
-            	}
-            	
-            	// Executar processo que está em sua vez
-            	
-            	if(executando == false) {
+            	if(pageFault == false) {
             		
-            		if(quantumAtual == 0 && sobrecargaAtual > 0) {
-            			sobrecargaAtual--;
-            			table_1.setValueAt("S", processoAtual.getPid(), contador);
-            		}
-            		else if(sobrecargaAtual == 0) {
-            			sobrecargaAtual = sobrecarga;
-            			quantumAtual = quantum;
-            			filaprocessos.add(processoAtual);
-            		}
+	            	contador++;
+	            	
+	            	// Se chegou o tempo de execução de algum processo, colocá-lo na fila
+	            	
+	            	for(int i = 0; i<nProcessos; i++) {  		
+	            		if(processos[i].getTempoChegada() == contador) {
+	            			filaprocessos.add(processos[i]);
+	            		}	
+	            	}
+	            	
+	            	
+	            	
+	            	if(executando == false) {
+	            		
+	            		if(quantumAtual == 0 && sobrecargaAtual > 0) {
+	            			sobrecargaAtual--;
+	            			table_1.setValueAt("S", processoAtual.getPid(), contador);
+	            		}
+	            		else if(sobrecargaAtual == 0) {
+	            			sobrecargaAtual = sobrecarga;
+	            			quantumAtual = quantum;
+	            			filaprocessos.add(processoAtual);
+	            		}
+	            		
+	            		if(!filaprocessos.isEmpty() && quantumAtual > 0) {
+	            			
+	            			processoAtual = filaprocessos.poll();
+	            			
+	            			executando = true;
+	            			
+	            			// Pagina o processo que vai ser executado
+	            			
+	            			Pagina[] paginasAtual = processoAtual.getPaginas();
+	            			
+	            			for(int i=0; i<processoAtual.getNumeroPaginas(); i++) {
+	            				
+	            				if(algoritmoPaginacao == "MRU") {
+		            				
+		            				Pagina paginaAux = paginasAtual[i];
+		            				
+		            				if(paginas.remove(paginaAux)) {
+		            					paginaAux.setTempo(contador);
+		            					paginas.add(paginaAux);
+		            				}
+		            				
+		            				else {
+		            					
+		            					pageFault = true;
+		            					
+		            					executando = false;
+		            					
+		            					contadorP = 0;
+		            					
+		            					
+		            					paginasFault.add(paginaAux);
+		            					
+		            				}
+		            				
+		            			
+	            				}
+	            				else {
+	            					
+	            					
+		            				Pagina paginaAux = paginasAtual[i];
+		            				
+		            				
+	            					if(paginas.contains(paginaAux) == false) {
+	            						
+	            						pageFault = true;
+	            						executando = false;
+	            						
+	            						paginasFault.add(paginaAux);
+	            						contadorP = 0;
+	            						
+	            					}
+	            					
+	            					
+	            				}
+	            				
+	            			}
+	            			
+	            		}
+	            		
+	            	}
+	            	
+	            	// Executar processo que está em sua vez
+	            	
+	            	if(executando == true) {
+	            		
+	            		tempoExecAtual = processoAtual.getTempoExec();
+	            		processoAtual.setTempoExec(tempoExecAtual -1);
+	            		
+	            		processoAtual.setDeadline(processoAtual.getDeadline()-1);
+	            		
+	            		if(algoritmoEscalonamento == "RR" || algoritmoEscalonamento == "EDF") {
+	            			quantumAtual--;
+	            		}
+	            		
+	            		if(processoAtual.getTempoExec() == 0) {
+	            			processoAtual.setTurnaround(contador+1 - processoAtual.getTempoChegada());
+	            			somaturnarounds += processoAtual.getTurnaround();
+	            			System.out.println(turnaroundMedioValor);
+	            			countFim++;
+	            			executando = false;
+	            			quantumAtual = quantum;
+	            			sobrecargaAtual = sobrecarga;
+	            			
+	            			
+	            			if(countFim == nProcessos) {
+	            				
+	            				turnaroundMedioValor = somaturnarounds / nProcessos;
+	            				JOptionPane.showMessageDialog(null, "Todos processos finalizaram!" + " Turnaround m\u00E9dio = " + somaturnarounds + "/" + String.valueOf(nProcessos) + " = " + String.valueOf(turnaroundMedioValor));
+	            				table_1.setValueAt("X", processoAtual.getPid(), contador);
+	            				timer.stop();
+	            				
+	            			}
+	            			
+	            		}
+	            		
+	            		else if(quantumAtual == 0 && quantum > 0) {
+	            			
+	            			executando = false;
+	            			
+	            			           			
+	            		}
+	            		
+	            		
+	            		
+	            		table_1.setValueAt("X", processoAtual.getPid(), contador);
+	            		
+	            	}
+	               
+	            }
+            	else {
             		
-            		if(!filaprocessos.isEmpty() && (quantumAtual > 0 || algoritmoEscalonamento == "FIFO" || algoritmoEscalonamento == "SJF")) {
+            		if(!paginasFault.isEmpty()) {
             			
-            			processoAtual = filaprocessos.poll();
+            			Pagina paginaFaultAtual = paginasFault.get(0);
+            			paginasFault.remove(0);
+            			paginaFaultAtual.setTempo(contador);
+            			int i = paginas.size()/10;
+            			int j = paginas.size()%10;
+            			
+            			if(paginas.size() < 50) {
+            				
+            				
+            				paginas.add(paginaFaultAtual);
+            				
+            				
+            				table.setValueAt(paginaFaultAtual.getId(), j, i);
+            				
+            				
+            				
+            				
+            			}
+            			
+            			else {
+            				
+            				Pagina paginaAux = paginas.poll();
+            				paginas.add(paginaFaultAtual);
+            				
+            				for(i=0; i<5; i++) {
+            					for(j=0; j<10; j++) {
+            						if(table.getValueAt(j, i) == paginaAux.getId()) {
+            							table.setValueAt(paginaFaultAtual.getId(), j, i);
+            						}
+            					}
+            				}
+            				
+            				
+            			}
+            		
+            		contadorP++;
+            		}
+            		else {
+            			
             			executando = true;
+            			pageFault = false;
+            			
+            		
             		}
+            		
             		
             	}
-            	
-            	if(executando == true) {
-            		
-            		tempoExecAtual = processoAtual.getTempoExec();
-            		processoAtual.setTempoExec(tempoExecAtual -1);
-            		quantumAtual--;
-            		processoAtual.setDeadline(processoAtual.getDeadline()-1);
-            		
-            		if(processoAtual.getTempoExec() == 0) {
-            			executando = false;
-            			quantumAtual = quantum;
-            			sobrecargaAtual = sobrecarga;
-            		}
-            		
-            		else if(quantumAtual == 0 && quantum > 0) {
-            			
-            			executando = false;
-            			
-            			           			
-            		}
-            		
-            		
-            		
-            		table_1.setValueAt("X", processoAtual.getPid(), contador);
-            		
-            	}
-               
             }
         });
 
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1016, 710);
+		setBounds(100, 100, 1334, 805);
 		contentPane = new JPanel();
 		contentPane.setToolTipText("");
 		contentPane.setBackground(SystemColor.menu);
@@ -180,10 +339,11 @@ public class main extends JFrame {
 		contentPane.setLayout(null);
 		
 		JTextPane txtpnNovoProcesso = new JTextPane();
+		txtpnNovoProcesso.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txtpnNovoProcesso.setEditable(false);
 		txtpnNovoProcesso.setBackground(SystemColor.menu);
-		txtpnNovoProcesso.setText("Novo processo");
-		txtpnNovoProcesso.setBounds(46, 16, 124, 20);
+		txtpnNovoProcesso.setText("Escalonador de Processos");
+		txtpnNovoProcesso.setBounds(79, 11, 299, 25);
 		contentPane.add(txtpnNovoProcesso);
 		
 		JSpinner spinner = new JSpinner();
@@ -209,6 +369,7 @@ public class main extends JFrame {
 		contentPane.add(spinner_2);
 		
 		JSpinner spinner_3 = new JSpinner();
+		spinner_3.setModel(new SpinnerNumberModel(1, 1, 10, 1));
 		spinner_3.setBounds(20, 140, 30, 20);
 		contentPane.add(spinner_3);
 		
@@ -226,8 +387,8 @@ public class main extends JFrame {
 		
 		JTextPane txtpnPrioridade = new JTextPane();
 		txtpnPrioridade.setBackground(SystemColor.menu);
-		txtpnPrioridade.setText("Prioridade");
-		txtpnPrioridade.setBounds(60, 140, 84, 20);
+		txtpnPrioridade.setText("N\u00FAmero de p\u00E1ginas");
+		txtpnPrioridade.setBounds(60, 140, 130, 20);
 		contentPane.add(txtpnPrioridade);
 		
 		JButton btnCriarProcesso = new JButton("Criar processo");
@@ -238,6 +399,7 @@ public class main extends JFrame {
 				int aux2 = (Integer) spinner_1.getValue();
 				int aux3 = (Integer) spinner_2.getValue();
 				int aux4 = (Integer) spinner_3.getValue();
+				memoriaUsada += aux4;
 				
 				if(maxProcessosAtingido == false) {
 					
@@ -249,17 +411,72 @@ public class main extends JFrame {
 						JOptionPane.showMessageDialog(null, "Número máximo de processos atingido (15)");
 					}
 					
+					else if(memoriaUsada > 100) {
+						
+						JOptionPane.showMessageDialog(null, "Memória virtual máxima atingida!");
+						
+					}
+					
 					// Senão, cria processo
 					
 					else {
 						processos[nProcessos] = new processo(nProcessos+1, aux, aux2, aux3, aux4);
 						nProcessos++;
+				
+						
+						// Coloca o valor de PID na tabela
+						
 						table_1.setValueAt(processos[nProcessos-1].getPid(),nProcessos,0);
 						
-						// Coloca o valor PID na tabela
-
-                        table_1.setValueAt(nProcessos, nProcessos, 0);
+						Pagina[] paginas = new Pagina[aux4];
+						
+						
+						
+						for(int i=0; i<aux4; i++) {
+							
+							
+							String auxId = "P"+String.valueOf(processos[nProcessos-1].getPid())+"_"+String.valueOf(i);
+							paginas[i] = new Pagina(auxId);
+							
+						}
+					
+						
+						
+						processos[nProcessos-1].setPaginas(paginas);
+						
+							
+						for (int i = 0; i < processos[nProcessos-1].getNumeroPaginas(); i++) {
+								
+							table_2.setValueAt(paginas[i].getId() , lin_t2, col_t2);
+								
+								
+							if(lin_t1 == 9) {
+								lin_t1 = 0;
+								col_t1++;
+							}
+								
+							else {
+								lin_t1++;
+							}
+								
+							if (lin_t2 == 19) {
+								lin_t2 = 0;
+								col_t2++;
+							}
+								
+							else {
+								lin_t2++;
+							}
+						}
+							
+							
+							
+							
+						
+						
+					
 					}
+					
 					
 				}
 				
@@ -408,9 +625,79 @@ public class main extends JFrame {
 		table_1.getColumnModel().getColumn(38).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(39).setPreferredWidth(15);
 		table_1.getColumnModel().getColumn(40).setPreferredWidth(15);
-		table_1.setBounds(10, 405, 980, 256);
+		table_1.setBounds(10, 489, 1289, 256);
 		contentPane.add(table_1);
 		
+		table = new JTable();
+		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+			},
+			new String[] {
+				"New column", "New column", "New column", "New column", "New column"
+			}
+		));
+		table.setBounds(438, 81, 321, 160);
+		contentPane.add(table);
+		
+		table_2 = new JTable();
+		table_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+		table_2.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+			},
+			new String[] {
+				"New column", "New column", "New column", "New column", "New column"
+			}
+		));
+		table_2.setBounds(803, 81, 496, 320);
+		contentPane.add(table_2);
+		
+		JTextPane txtpnMemriaPrincipalram = new JTextPane();
+		txtpnMemriaPrincipalram.setText("Mem\u00F3ria Principal (RAM)");
+		txtpnMemriaPrincipalram.setFont(new Font("Tahoma", Font.BOLD, 18));
+		txtpnMemriaPrincipalram.setEditable(false);
+		txtpnMemriaPrincipalram.setBackground(SystemColor.menu);
+		txtpnMemriaPrincipalram.setBounds(475, 39, 238, 25);
+		contentPane.add(txtpnMemriaPrincipalram);
+		
+		JTextPane txtpnSwap = new JTextPane();
+		txtpnSwap.setText("Mem\u00F3ria Secund\u00E1ria");
+		txtpnSwap.setFont(new Font("Tahoma", Font.BOLD, 18));
+		txtpnSwap.setEditable(false);
+		txtpnSwap.setBackground(SystemColor.menu);
+		txtpnSwap.setBounds(950, 39, 238, 25);
+		contentPane.add(txtpnSwap);
+	
 	
 	}
 }

@@ -26,30 +26,43 @@ public class processo {
 	public void setDeadline(int deadline) {
 		this.deadline = deadline;
 	}
-	public int getPrioridade() {
-		return prioridade;
-	}
-	public void setPrioridade(int prioridade) {
-		this.prioridade = prioridade;
-	}
 	public int getNumeroPaginas() {
 		return numeroPaginas;
 	}
 	public void setNumeroPaginas(int numeroPaginas) {
 		this.numeroPaginas = numeroPaginas;
 	}
-	public processo(int pid, int tempoChegada, int tempoExec, int deadline, int prioridade) {
+	public processo(int pid, int tempoChegada, int tempoExec, int deadline, int numeroPaginas) {
 		super();
 		this.pid = pid;
 		this.tempoChegada = tempoChegada;
 		this.tempoExec = tempoExec;
 		this.deadline = deadline;
-		this.prioridade = prioridade;
+		this.numeroPaginas = numeroPaginas;
 	}
 	public int pid;
 	public int tempoChegada;
 	public int tempoExec;
 	public int deadline;
-	public int prioridade;
 	public int numeroPaginas;
+	public Pagina[] paginas;
+	public int turnaround;
+	
+	public int getTurnaround() {
+		return turnaround;
+	}
+	public void setTurnaround(int turnaround) {
+		this.turnaround = turnaround;
+	}
+	public Pagina[] getPaginas() {
+		return paginas;
+	}
+	public void setPaginas(Pagina[] paginas) {
+		this.paginas = paginas;
+	}
+
+	
+
+	
+	
 }

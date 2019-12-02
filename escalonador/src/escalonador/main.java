@@ -471,7 +471,7 @@ public class main extends JFrame {
 					// Senão, cria processo
 					
 					else {
-						processos[nProcessos-1] = new processo(nProcessos, aux, aux2, aux3, aux4, aux5);
+						processos[nProcessos-1] = new processo(nProcessos, aux, aux2, aux3+aux, aux4, aux5);
 						
 				
 						

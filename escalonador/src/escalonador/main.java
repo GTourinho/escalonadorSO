@@ -440,6 +440,7 @@ public class main extends JFrame {
 		btnCriarProcesso.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				nProcessos++;
 				int aux = (Integer) spinner.getValue();
 				int aux2 = (Integer) spinner_1.getValue();
 				int aux3 = (Integer) spinner_2.getValue();
@@ -451,14 +452,18 @@ public class main extends JFrame {
 					
 					// Se atingir o máximo de processos, impede a criação de um novo
 					
-					if(nProcessos == 15) {
+					if(nProcessos == 16) {
 						nProcessos--;
 						maxProcessosAtingido = true;
 						JOptionPane.showMessageDialog(null, "Número máximo de processos atingido (15)");
 					}
 					
+					// Se atingir o máximo de memória, também impede a criação de novo processo
+					
 					else if(memoriaUsada > 100) {
 						
+						nProcessos--;
+						memoriaUsada -= aux4;
 						JOptionPane.showMessageDialog(null, "Memória virtual máxima atingida!");
 						
 					}
@@ -466,8 +471,8 @@ public class main extends JFrame {
 					// Senão, cria processo
 					
 					else {
-						processos[nProcessos] = new processo(nProcessos+1, aux, aux2, aux3, aux4, aux5);
-						nProcessos++;
+						processos[nProcessos-1] = new processo(nProcessos, aux, aux2, aux3, aux4, aux5);
+						
 				
 						
 						// Coloca o valor de PID na tabela

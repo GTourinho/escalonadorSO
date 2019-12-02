@@ -47,20 +47,30 @@ public class main extends JFrame {
         @Override
         public int compare(processo a, processo b) {
         	
+        	int aux;
+        	
         	if(algoritmoEscalonamento == "EDF") {
         	
         	
-            return a.getDeadline() - b.getDeadline();
+        		aux = a.getDeadline() - b.getDeadline();
             
         	}
         	else if(algoritmoEscalonamento == "SJF") {
         		
-        		return a.getTempoExec() - b.getTempoExec();
+        		aux =  a.getTempoExec() - b.getTempoExec();
         		
         	}
         	
+        	else {
+        		aux = a.tempoChegada - b.tempoChegada;
+        	}
         	
-			return a.tempoChegada - b.tempoChegada;
+        	
+        	if(aux == 0) {
+        		aux = b.getPrioridade() - a.getPrioridade();
+        	}
+        	
+			return aux;
             
         }
     };
@@ -80,6 +90,8 @@ public class main extends JFrame {
             
         }
     };
+    
+    
     
     public int countFim = 0;
     public double turnaroundMedioValor = 0;
@@ -404,12 +416,6 @@ public class main extends JFrame {
 		spinner.setBounds(20, 47, 30, 20);
 		contentPane.add(spinner);
 		
-		JTextPane txtpnTempochegada = new JTextPane();
-		txtpnTempochegada.setBackground(SystemColor.menu);
-		txtpnTempochegada.setText("Tempo de Chegada");
-		txtpnTempochegada.setBounds(60, 47, 130, 20);
-		contentPane.add(txtpnTempochegada);
-		
 		JSpinner spinner_1 = new JSpinner();
 		spinner_1.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		spinner_1.setBounds(20, 78, 30, 20);
@@ -425,23 +431,10 @@ public class main extends JFrame {
 		spinner_3.setBounds(20, 140, 30, 20);
 		contentPane.add(spinner_3);
 		
-		JTextPane txtpnTempoExecuo = new JTextPane();
-		txtpnTempoExecuo.setBackground(SystemColor.menu);
-		txtpnTempoExecuo.setText("Tempo de Execu\u00E7\u00E3o");
-		txtpnTempoExecuo.setBounds(60, 78, 130, 20);
-		contentPane.add(txtpnTempoExecuo);
-		
-		JTextPane txtpnTempo = new JTextPane();
-		txtpnTempo.setBackground(SystemColor.menu);
-		txtpnTempo.setText("Deadline");
-		txtpnTempo.setBounds(60, 109, 84, 20);
-		contentPane.add(txtpnTempo);
-		
-		JTextPane txtpnPrioridade = new JTextPane();
-		txtpnPrioridade.setBackground(SystemColor.menu);
-		txtpnPrioridade.setText("N\u00FAmero de p\u00E1ginas");
-		txtpnPrioridade.setBounds(60, 140, 130, 20);
-		contentPane.add(txtpnPrioridade);
+		JSpinner spinner_8 = new JSpinner();
+		JLabel lblNewLabel = new JLabel("Sobrecarga do sistema");
+		lblNewLabel.setBounds(264, 143, 139, 14);
+		contentPane.add(lblNewLabel);
 		
 		JButton btnCriarProcesso = new JButton("Criar processo");
 		btnCriarProcesso.addActionListener(new ActionListener() {
@@ -451,6 +444,7 @@ public class main extends JFrame {
 				int aux2 = (Integer) spinner_1.getValue();
 				int aux3 = (Integer) spinner_2.getValue();
 				int aux4 = (Integer) spinner_3.getValue();
+				int aux5 = (Integer) spinner_8.getValue();
 				memoriaUsada += aux4;
 				
 				if(maxProcessosAtingido == false) {
@@ -472,7 +466,7 @@ public class main extends JFrame {
 					// Senão, cria processo
 					
 					else {
-						processos[nProcessos] = new processo(nProcessos+1, aux, aux2, aux3, aux4);
+						processos[nProcessos] = new processo(nProcessos+1, aux, aux2, aux3, aux4, aux5);
 						nProcessos++;
 				
 						
@@ -537,7 +531,7 @@ public class main extends JFrame {
 				}
 			}
 		});
-		btnCriarProcesso.setBounds(30, 171, 124, 23);
+		btnCriarProcesso.setBounds(30, 202, 124, 23);
 		contentPane.add(btnCriarProcesso);
 		
 		JSpinner spinner_4 = new JSpinner();
@@ -546,7 +540,7 @@ public class main extends JFrame {
 		contentPane.add(spinner_4);
 		
 		JLabel lblAlgoritmoDeEscalonamento = new JLabel("Algoritmo de escalonamento");
-		lblAlgoritmoDeEscalonamento.setBounds(264, 50, 154, 14);
+		lblAlgoritmoDeEscalonamento.setBounds(264, 50, 188, 14);
 		contentPane.add(lblAlgoritmoDeEscalonamento);
 		
 		JSpinner spinner_5 = new JSpinner();
@@ -572,9 +566,7 @@ public class main extends JFrame {
 		spinner_7.setBounds(224, 140, 30, 20);
 		contentPane.add(spinner_7);
 		
-		JLabel lblNewLabel = new JLabel("Sobrecarga do sistema");
-		lblNewLabel.setBounds(264, 143, 139, 14);
-		contentPane.add(lblNewLabel);
+		
 		
 		JButton btnNewButton = new JButton("Iniciar simula\u00E7\u00E3o");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -598,7 +590,7 @@ public class main extends JFrame {
 				
 			}
 		});
-		btnNewButton.setBounds(224, 171, 154, 23);
+		btnNewButton.setBounds(224, 202, 154, 23);
 		contentPane.add(btnNewButton);
 		
 		table_1 = new JTable();
@@ -749,6 +741,31 @@ public class main extends JFrame {
 		txtpnSwap.setBackground(SystemColor.menu);
 		txtpnSwap.setBounds(950, 39, 238, 25);
 		contentPane.add(txtpnSwap);
+		
+		
+		spinner_8.setModel(new SpinnerNumberModel(new Integer(0), null, null, new Integer(1)));
+		spinner_8.setBounds(20, 171, 30, 20);
+		contentPane.add(spinner_8);
+		
+		JLabel lblTempoDeChegada = new JLabel("Tempo de chegada");
+		lblTempoDeChegada.setBounds(60, 50, 106, 14);
+		contentPane.add(lblTempoDeChegada);
+		
+		JLabel lblTempoDeExecuo = new JLabel("Tempo de execu\u00E7\u00E3o");
+		lblTempoDeExecuo.setBounds(60, 81, 124, 14);
+		contentPane.add(lblTempoDeExecuo);
+		
+		JLabel lblNewLabel_1 = new JLabel("Deadline");
+		lblNewLabel_1.setBounds(60, 112, 95, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblNmeroDePginas = new JLabel("N\u00FAmero de p\u00E1ginas");
+		lblNmeroDePginas.setBounds(60, 143, 106, 14);
+		contentPane.add(lblNmeroDePginas);
+		
+		JLabel lblPrioridade = new JLabel("Prioridade");
+		lblPrioridade.setBounds(60, 174, 106, 14);
+		contentPane.add(lblPrioridade);
 	
 	
 	}

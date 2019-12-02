@@ -32,13 +32,14 @@ public class processo {
 	public void setNumeroPaginas(int numeroPaginas) {
 		this.numeroPaginas = numeroPaginas;
 	}
-	public processo(int pid, int tempoChegada, int tempoExec, int deadline, int numeroPaginas) {
+	public processo(int pid, int tempoChegada, int tempoExec, int deadline, int numeroPaginas, int prioridade) {
 		super();
 		this.pid = pid;
 		this.tempoChegada = tempoChegada;
 		this.tempoExec = tempoExec;
 		this.deadline = deadline;
 		this.numeroPaginas = numeroPaginas;
+		this.prioridade = prioridade;
 	}
 	public int pid;
 	public int tempoChegada;
@@ -47,7 +48,14 @@ public class processo {
 	public int numeroPaginas;
 	public Pagina[] paginas;
 	public int turnaround;
+	public int prioridade;
 	
+	public int getPrioridade() {
+		return prioridade;
+	}
+	public void setPrioridade(int prioridade) {
+		this.prioridade = prioridade;
+	}
 	public int getTurnaround() {
 		return turnaround;
 	}
